@@ -1,22 +1,22 @@
-﻿已經開始建置於 2016/3/14 下午 10:47:34。
-     1>節點 2 (Build 目標) 上的專案 "C:\Users\user\Desktop\程式\OpenCv\Project1\Project1\Project1.vcxproj"。
+﻿已經開始建置於 2016/3/17 上午 10:31:55。
+     1>節點 2 (Build 目標) 上的專案 "C:\Users\user\Desktop\程式\Special-Project\Project1\Project1\Project1.vcxproj"。
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /IC:\opencv\build\include /IC:\opencv\build\include\opencv /IC:\opencv\build\include\opencv2 /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt main.cpp
          main.cpp
      1>c:\opencv\build\include\opencv2\core\mat.hpp(1965): warning C4819: 檔案含有無法在目前字碼頁 (950) 中表示的字元。請以 Unicode 格式儲存檔案以防止資料遺失
      1>c:\opencv\build\include\opencv2\core\persistence.hpp : warning C4819: 檔案含有無法在目前字碼頁 (950) 中表示的字元。請以 Unicode 格式儲存檔案以防止資料遺失
      1>c:\opencv\build\include\opencv2\core\utility.hpp : warning C4819: 檔案含有無法在目前字碼頁 (950) 中表示的字元。請以 Unicode 格式儲存檔案以防止資料遺失
-     1>c:\users\user\desktop\程式\opencv\project1\project1\main.cpp(60): warning C4018: '<' : signed/unsigned 不相符
-     1>c:\users\user\desktop\程式\opencv\project1\project1\main.cpp(23): warning C4101: 'dwSendSize' : 未參考的區域變數
-     1>c:\users\user\desktop\程式\opencv\project1\project1\main.cpp(24): warning C4101: 'data' : 未參考的區域變數
-     1>c:\users\user\desktop\程式\opencv\project1\project1\main.cpp(152): warning C4800: 'BOOL' : 強制將 bool 的值定為 'true' 或 'false' (效能警告)
-     1>c:\users\user\desktop\程式\opencv\project1\project1\main.cpp(156): warning C4800: 'BOOL' : 強制將 bool 的值定為 'true' 或 'false' (效能警告)
-     1>c:\users\user\desktop\程式\opencv\project1\project1\main.cpp(168): warning C4800: 'BOOL' : 強制將 bool 的值定為 'true' 或 'false' (效能警告)
+     1>c:\users\user\desktop\程式\special-project\project1\project1\main.cpp(26): warning C4101: 'dwSendSize' : 未參考的區域變數
+     1>c:\users\user\desktop\程式\special-project\project1\project1\main.cpp(27): warning C4101: 'data' : 未參考的區域變數
+     1>c:\users\user\desktop\程式\special-project\project1\project1\main.cpp(148): warning C4018: '<' : signed/unsigned 不相符
+     1>c:\users\user\desktop\程式\special-project\project1\project1\main.cpp(162): warning C4800: 'BOOL' : 強制將 bool 的值定為 'true' 或 'false' (效能警告)
+     1>c:\users\user\desktop\程式\special-project\project1\project1\main.cpp(166): warning C4800: 'BOOL' : 強制將 bool 的值定為 'true' 或 'false' (效能警告)
+     1>c:\users\user\desktop\程式\special-project\project1\project1\main.cpp(178): warning C4800: 'BOOL' : 強制將 bool 的值定為 'true' 或 'false' (效能警告)
        Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\user\Desktop\程式\OpenCv\Project1\Debug\Project1.exe" /INCREMENTAL /NOLOGO /LIBPATH:C:\opencv\build\x86\vc12 C:\opencv\build\x86\vc12\lib\opencv_world300d.lib C:\opencv\build\x86\vc12\lib\opencv_world300.lib C:\opencv\build\x86\vc12\lib\opencv_ts300d.lib C:\opencv\build\x86\vc12\lib\opencv_ts300.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\user\Desktop\程式\OpenCv\Project1\Debug\Project1.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\user\Desktop\程式\OpenCv\Project1\Debug\Project1.lib" /MACHINE:X86 Debug\main.obj
-         Project1.vcxproj -> C:\Users\user\Desktop\程式\OpenCv\Project1\Debug\Project1.exe
-     1>專案 "C:\Users\user\Desktop\程式\OpenCv\Project1\Project1\Project1.vcxproj" (Build 目標) 建置完成。
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\user\Desktop\程式\Special-Project\Project1\Debug\Project1.exe" /INCREMENTAL /NOLOGO /LIBPATH:C:\opencv\build\x86\vc12 C:\opencv\build\x86\vc12\lib\opencv_world300d.lib C:\opencv\build\x86\vc12\lib\opencv_world300.lib C:\opencv\build\x86\vc12\lib\opencv_ts300d.lib C:\opencv\build\x86\vc12\lib\opencv_ts300.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\user\Desktop\程式\Special-Project\Project1\Debug\Project1.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\user\Desktop\程式\Special-Project\Project1\Debug\Project1.lib" /MACHINE:X86 Debug\main.obj
+         Project1.vcxproj -> C:\Users\user\Desktop\程式\Special-Project\Project1\Debug\Project1.exe
+     1>專案 "C:\Users\user\Desktop\程式\Special-Project\Project1\Project1\Project1.vcxproj" (Build 目標) 建置完成。
 
 建置成功。
 
-經過時間 00:00:05.12
+經過時間 00:00:02.34

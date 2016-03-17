@@ -13,9 +13,12 @@ HANDLE arduino;
 bool Ret;
 int Cols;
 DCB dcb;
+Mat imgOriginal;
 
 void setup();
 char myMove(int, int);
+void searchColor();
+void contourTest();
 
 int main(int argc, char** argv)
 {
@@ -26,8 +29,6 @@ int main(int argc, char** argv)
 	Mat img1;
 	Vec3b Black; // Vec3b為色彩圖像素值的類別型態，由3個向量組成，ex: [0,0,0]為黑色，[255,255,255]為白色
 	int num, avrg;
-	Mat imgOriginal;
-
 
 	try{
 		//code start
@@ -47,21 +48,10 @@ int main(int argc, char** argv)
 			if (!bSuccess) //if not success, break loop
 				throw 7;
 
+			contourTest();
 			cvtColor(imgOriginal, imgOriginal, COLOR_BGR2HSV); //將讀取進來的新影像由 BGR轉換為 HSV
-			
-			/******************* 判　　斷 *******************/
 
-			//辨識選取的顏色範圍(僅可使用HSV)	註：紅色跨越色頻(H)的0度 只好分兩個做
-			inRange(imgOriginal, Scalar(60, 0, 0), Scalar(150, 255, 255), imgOriginal);
-
-			//開放：傾蝕後膨脹(移除小物件)	使用方式 dilate/erode(輸入影像, 輸出影像, 結構性元素, 錨點, 侵蝕/膨脹次數)
-			erode(imgOriginal, imgOriginal, getStructuringElement(MORPH_ELLIPSE, Size(5, 5)), Point(-1, -1), 3);
-			dilate(imgOriginal, imgOriginal, getStructuringElement(MORPH_ELLIPSE, Size(5, 5)), Point(-1, -1), 3);
-
-			//封閉：膨脹後傾蝕(去除小洞)
-			dilate(imgOriginal, imgOriginal, getStructuringElement(MORPH_ELLIPSE, Size(5, 5)), Point(-1, -1), 3);
-			erode(imgOriginal, imgOriginal, getStructuringElement(MORPH_ELLIPSE, Size(5, 5)), Point(-1, -1), 3);
-
+			searchColor();
 			/******************* 計　　算 *******************/
 
 			//另外判斷我要再調整，因為判斷實在有點爛
@@ -90,7 +80,7 @@ int main(int argc, char** argv)
 			if (!Ret)
 				throw 5;
 */
-			imshow("Thresholded Image", imgOriginal); //顯示轉換後的影像
+			//imshow("Thresholded Image", imgOriginal); //顯示轉換後的影像
 			waitKey(30);
 		}
 	}
@@ -125,6 +115,42 @@ char myMove(int n, int total){
 		return '2';
 	else
 		return '0';
+}
+
+/******************* 判　　斷 *******************/
+void searchColor(){
+
+	//辨識選取的顏色範圍(僅可使用HSV)	註：紅色跨越色頻(H)的0度 只好分兩個做
+	inRange(imgOriginal, Scalar(60, 0, 0), Scalar(150, 255, 255), imgOriginal);
+
+	//開放：傾蝕後膨脹(移除小物件)	使用方式 dilate/erode(輸入影像, 輸出影像, 結構性元素, 錨點, 侵蝕/膨脹次數)
+	erode(imgOriginal, imgOriginal, getStructuringElement(MORPH_ELLIPSE, Size(5, 5)), Point(-1, -1), 3);
+	dilate(imgOriginal, imgOriginal, getStructuringElement(MORPH_ELLIPSE, Size(5, 5)), Point(-1, -1), 3);
+
+	//封閉：膨脹後傾蝕(去除小洞)
+	dilate(imgOriginal, imgOriginal, getStructuringElement(MORPH_ELLIPSE, Size(5, 5)), Point(-1, -1), 3);
+	erode(imgOriginal, imgOriginal, getStructuringElement(MORPH_ELLIPSE, Size(5, 5)), Point(-1, -1), 3);
+
+}
+void contourTest(){
+	Mat imgGray;
+	vector<vector<Point> > contours;
+	vector<Vec4i> hierarchy;
+	RNG rng(12345);
+	
+	cvtColor(imgOriginal, imgGray, COLOR_BGR2GRAY);
+	
+	blur(imgGray, imgGray, Size(3, 3));
+	Canny(imgGray, imgGray, 100, 200, 3);
+	findContours(imgGray, contours, hierarchy, RETR_TREE, CHAIN_APPROX_SIMPLE, Point(0, 0));
+
+	imgGray = Mat::zeros(imgGray.size(), CV_8UC3);
+	for (int i = 0; i< contours.size(); i++)
+	{
+		Scalar color = Scalar(rng.uniform(0, 255), rng.uniform(0, 255), rng.uniform(0, 255));
+		drawContours(imgGray, contours, i, color, 2, 8, hierarchy, 0, Point());
+	}
+	imshow("Test", imgGray);
 }
 
 void setup(){
