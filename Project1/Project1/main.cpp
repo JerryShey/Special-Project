@@ -51,11 +51,11 @@ int main(int argc, char** argv)
 			contourTest();
 			cvtColor(imgOriginal, imgOriginal, COLOR_BGR2HSV); //將讀取進來的新影像由 BGR轉換為 HSV
 
-			searchColor();
+			//searchColor();
 			/******************* 計　　算 *******************/
 
 			//另外判斷我要再調整，因為判斷實在有點爛
-			num = 0;
+			/*num = 0;
 			avrg = 0;
 			Cols = imgOriginal.cols / 3 - 20;
 
@@ -81,7 +81,7 @@ int main(int argc, char** argv)
 				throw 5;
 */
 			//imshow("Thresholded Image", imgOriginal); //顯示轉換後的影像
-			waitKey(8);
+			waitKey(1);
 		}
 	}
 	catch (int num){
@@ -145,10 +145,15 @@ void contourTest(){
 	findContours(imgGray, contours, hierarchy, RETR_TREE, CHAIN_APPROX_SIMPLE, Point(0, 0));
 
 	imgGray = Mat::zeros(imgGray.size(), CV_8UC3);
+
+	
 	for (int i = 0; i< contours.size(); i++)
 	{
+		/*********** 簡化邊 ***********/
+		//approxPolyDP(contours[i], contours[i], 10, TRUE);
+		/* 畫線 */
 		Scalar color = Scalar(rng.uniform(0, 255), rng.uniform(0, 255), rng.uniform(0, 255));
-		drawContours(imgGray, contours, i, color, 2, 8, hierarchy, 0, Point());
+		drawContours(imgGray, contours, i, color, 1, 8, hierarchy, 0, Point());
 	}
 	imshow("Test", imgGray);
 }
