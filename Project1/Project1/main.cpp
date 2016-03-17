@@ -81,7 +81,7 @@ int main(int argc, char** argv)
 				throw 5;
 */
 			//imshow("Thresholded Image", imgOriginal); //顯示轉換後的影像
-			waitKey(30);
+			waitKey(8);
 		}
 	}
 	catch (int num){
