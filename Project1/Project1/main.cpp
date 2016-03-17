@@ -5,6 +5,7 @@
 #include "winBase.h" 
 #include <stdio.h>
 #include <stdlib.h>
+#include "opencv/cv.h"
 
 using namespace cv;
 using namespace std;
@@ -14,11 +15,13 @@ bool Ret;
 int Cols;
 DCB dcb;
 Mat imgOriginal;
+Mat imgContours;
 
 void setup();
 char myMove(int, int);
 void searchColor();
 void contourTest();
+void saveImg(int);
 
 int main(int argc, char** argv)
 {
@@ -26,9 +29,8 @@ int main(int argc, char** argv)
 	DWORD dwSendSize;
 	BYTE data;
 	char nextStep;
-	Mat img1;
 	Vec3b Black; // Vec3b為色彩圖像素值的類別型態，由3個向量組成，ex: [0,0,0]為黑色，[255,255,255]為白色
-	int num, avrg;
+	int num, avrg, photoNum = 0;
 
 	try{
 		//code start
@@ -44,14 +46,22 @@ int main(int argc, char** argv)
 
 			bool bSuccess = cap.read(imgOriginal); //自攝影機讀取一個新的影像
 			imshow("Original", imgOriginal); //顯示擷取下來的原始影像
-
+			
+			/*按下c儲存影像(最多存10張)*/
+			if (waitKey(1) == 'c'){
+				if (photoNum == 10){
+					photoNum = 0;
+				}
+				photoNum++;
+				saveImg(photoNum);
+			}
+			
 			if (!bSuccess) //if not success, break loop
 				throw 7;
 
 			contourTest();
-			cvtColor(imgOriginal, imgOriginal, COLOR_BGR2HSV); //將讀取進來的新影像由 BGR轉換為 HSV
-
 			//searchColor();
+
 			/******************* 計　　算 *******************/
 
 			//另外判斷我要再調整，因為判斷實在有點爛
@@ -117,8 +127,9 @@ char myMove(int n, int total){
 		return '0';
 }
 
-/******************* 判　　斷 *******************/
+/******************* 顏	色 *******************/
 void searchColor(){
+	cvtColor(imgOriginal, imgOriginal, COLOR_BGR2HSV); //將讀取進來的新影像由 BGR轉換為 HSV
 
 	//辨識選取的顏色範圍(僅可使用HSV)	註：紅色跨越色頻(H)的0度 只好分兩個做
 	inRange(imgOriginal, Scalar(60, 0, 0), Scalar(150, 255, 255), imgOriginal);
@@ -132,19 +143,20 @@ void searchColor(){
 	erode(imgOriginal, imgOriginal, getStructuringElement(MORPH_ELLIPSE, Size(5, 5)), Point(-1, -1), 3);
 
 }
+
+/****偵測邊緣用的****/
 void contourTest(){
-	Mat imgGray;
 	vector<vector<Point> > contours;
 	vector<Vec4i> hierarchy;
 	RNG rng(12345);
 	
-	cvtColor(imgOriginal, imgGray, COLOR_BGR2GRAY);
+	cvtColor(imgOriginal, imgContours, COLOR_BGR2GRAY);
 	
-	blur(imgGray, imgGray, Size(3, 3));
-	Canny(imgGray, imgGray, 100, 200, 3);
-	findContours(imgGray, contours, hierarchy, RETR_TREE, CHAIN_APPROX_SIMPLE, Point(0, 0));
+	blur(imgContours, imgContours, Size(3, 3));
+	Canny(imgContours, imgContours, 100, 200, 3);
+	findContours(imgContours, contours, hierarchy, RETR_TREE, CHAIN_APPROX_SIMPLE, Point(0, 0));
 
-	imgGray = Mat::zeros(imgGray.size(), CV_8UC3);
+	imgContours = Mat::zeros(imgContours.size(), CV_8UC3);
 
 	
 	for (int i = 0; i< contours.size(); i++)
@@ -153,9 +165,9 @@ void contourTest(){
 		//approxPolyDP(contours[i], contours[i], 10, TRUE);
 		/* 畫線 */
 		Scalar color = Scalar(rng.uniform(0, 255), rng.uniform(0, 255), rng.uniform(0, 255));
-		drawContours(imgGray, contours, i, color, 1, 8, hierarchy, 0, Point());
+		drawContours(imgContours, contours, i, color, 1, 8, hierarchy, 0, Point());
 	}
-	imshow("Test", imgGray);
+	imshow("Test", imgContours);
 }
 
 void setup(){
@@ -183,4 +195,16 @@ void setup(){
 	Ret = SetCommState(arduino, &dcb);
 	if (!Ret)
 		throw 4;
+}
+
+/*儲存影像(預設在專案中的Special-Project\Project1\Project1\photo中)*/
+void saveImg(int n){
+	char addreas[100] = ".\\photo\\";
+	char numstr[5];
+	_itoa_s(n, numstr, 10);
+	strcat_s(addreas, numstr);
+	strcat_s(addreas, ".jpg");
+
+	imwrite(addreas, imgContours);
+	cout << "儲存影像" << endl;
 }
