@@ -46,7 +46,7 @@ int main(int argc, char** argv)
 
 			bool bSuccess = cap.read(imgOriginal); //自攝影機讀取一個新的影像
 			imshow("Original", imgOriginal); //顯示擷取下來的原始影像
-			
+
 			/*按下c儲存影像(最多存10張)*/
 			if (waitKey(1) == 'c'){
 				if (photoNum == 10){
@@ -146,7 +146,7 @@ void searchColor(){
 
 /****偵測邊緣用的****/
 void contourTest(){
-	vector<vector<Point> > contours;
+	vector<vector<Point>> contours;
 	vector<Vec4i> hierarchy;
 	RNG rng(12345);
 	
@@ -157,7 +157,6 @@ void contourTest(){
 	findContours(imgContours, contours, hierarchy, RETR_TREE, CHAIN_APPROX_SIMPLE, Point(0, 0));
 
 	imgContours = Mat::zeros(imgContours.size(), CV_8UC3);
-
 	
 	for (int i = 0; i< contours.size(); i++)
 	{
