@@ -21,7 +21,7 @@ void setup();
 char myMove(int, int);
 void searchColor();
 void contourTest();
-void saveImg(int);
+void saveImg(int, int);
 
 int main(int argc, char** argv)
 {
@@ -32,9 +32,11 @@ int main(int argc, char** argv)
 	Vec3b Black; // Vec3b為色彩圖像素值的類別型態，由3個向量組成，ex: [0,0,0]為黑色，[255,255,255]為白色
 	int num, avrg, photoNum = 0;
 
+	cout << "Press c to save your webCam's image" << endl;
+	cout << "Press v to save the image after ContourTest" << endl;
 	try{
 		//code start
-		VideoCapture cap(0); //capture the video from web cam
+		VideoCapture cap(1); //capture the video from web cam
 
 		if (!cap.isOpened())  // if not success, exit program
 			throw 0;
@@ -48,12 +50,20 @@ int main(int argc, char** argv)
 			imshow("Original", imgOriginal); //顯示擷取下來的原始影像
 
 			/*按下c儲存影像(最多存10張)*/
-			if (waitKey(1) == 'c'){
-				if (photoNum == 10){
+			char save = waitKey(1);
+			if (save == 'v'){
+				if (photoNum == 20){
 					photoNum = 0;
 				}
 				photoNum++;
-				saveImg(photoNum);
+				saveImg(photoNum, 0);
+			}
+			else if (save == 'c'){
+				if (photoNum == 20){
+					photoNum = 0;
+				}
+				photoNum++;
+				saveImg(photoNum, 1);
 			}
 			
 			if (!bSuccess) //if not success, break loop
@@ -91,7 +101,7 @@ int main(int argc, char** argv)
 				throw 5;
 */
 			//imshow("Thresholded Image", imgOriginal); //顯示轉換後的影像
-			waitKey(1);
+			//waitKey(1);
 		}
 	}
 	catch (int num){
@@ -197,13 +207,19 @@ void setup(){
 }
 
 /*儲存影像(預設在專案中的Special-Project\Project1\Project1\photo中)*/
-void saveImg(int n){
+void saveImg(int n, int status){
 	char addreas[100] = ".\\photo\\";
 	char numstr[5];
 	_itoa_s(n, numstr, 10);
 	strcat_s(addreas, numstr);
 	strcat_s(addreas, ".jpg");
 
-	imwrite(addreas, imgContours);
-	cout << "儲存影像" << endl;
+	if (status){
+		imwrite(addreas, imgOriginal);
+		cout << "儲存原圖像" << endl;
+	}
+	else{
+		imwrite(addreas, imgContours);
+		cout << "儲存邊緣圖" << endl;
+	}
 }
