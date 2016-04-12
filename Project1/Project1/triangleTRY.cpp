@@ -1,10 +1,12 @@
 ﻿#include "opencv2/highgui/highgui.hpp"
 #include "opencv2/imgproc/imgproc.hpp"
+#include "opencv/cv.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
 #include <string.h>
 #include <iostream>
+
 using namespace cv;
 using namespace std;
 
@@ -13,7 +15,7 @@ IplImage* img = NULL;
 IplImage* img0 = NULL;
 CvMemStorage* storage = NULL;
 const char * wndname = "三角形DEMO";
-
+Mat imgOriginal;
 
 // 兩個向量之間找到角度的餘弦
 // from pt0->pt1 and from pt0->pt2
@@ -150,7 +152,7 @@ void drawSquares(IplImage* img, CvSeq* squares)
 	cvReleaseImage(&cpy);
 }
 
-char* names[] = { "1.jpg", "2.jpg", "3.jpg", "4.jpg", "5.jpg", "6.jpg",
+char* names[] = { "1.png", "2.png", "3.png", "4.jpg", "5.jpg", "6.jpg",
 "7.jpg", "8.jpg", "9.jpg", "10.jpg", 0 };
 
 int main(int argc, char** argv)
@@ -158,28 +160,36 @@ int main(int argc, char** argv)
 	int c, i;
 	// create memory storage that will contain all the dynamic data
 	storage = cvCreateMemStorage(0);
-	for (i = 0; names[i] != 0; i++){
-		img0 = cvLoadImage(names[i], 1);
-		if (!img0)
+	VideoCapture cap(0);
+	if (!cap.isOpened())
+		return 0;
+
+	while (true){
+		bool bSuccess = cap.read(imgOriginal); //自攝影機讀取一個新的影像
+
+		imshow("Original", imgOriginal); //顯示擷取下來的原始影像
+
+		if (!bSuccess)
 		{
-			printf("不能載入第%d張，載入下一張", i);
+			printf("不能載入");
 			continue;
 		}
+		img0 = &IplImage(imgOriginal);
 		img = cvCloneImage(img0);
 
 		cvNamedWindow(wndname, 1);
 
 		drawSquares(img, findSquares4(img, storage));
 
-
+		c = cvWaitKey(10);
 		// release both images
 		cvReleaseImage(&img);
-		cvReleaseImage(&img0);
+		//cvReleaseImage(&img0);
 		// clear memory storage - reset free space position
 		cvClearMemStorage(storage);
 
-		cout << "按任意鍵繼續：" << endl << fflush;
-		cin.get();
+		if ((char)c == 27)
+			break;
 	}
 
 	cvDestroyWindow(wndname);

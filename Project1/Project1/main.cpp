@@ -47,6 +47,7 @@ int main(int argc, char** argv)
 		{
 
 			bool bSuccess = cap.read(imgOriginal); //自攝影機讀取一個新的影像
+			IplImage* img = &IplImage(imgOriginal);
 			imshow("Original", imgOriginal); //顯示擷取下來的原始影像
 
 			/*按下c儲存影像(最多存10張)*/
