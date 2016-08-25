@@ -1,57 +1,55 @@
 #include <Servo.h>
 Servo my[4];
-int i=20;
+int allvalue=20;
 unsigned long f;
-char a;
+int myvalue[4]= {20, 20 ,20 ,20};
 void setup()
 {
-	// pinMode(7,OUTPUT);
-	// pinMode(6,INPUT);
+
 	my[0].attach(9);	//24
 	my[1].attach(10);  //13
 	my[2].attach(11);
 	my[3].attach(3);
-	delay(100);
-	my[0].writeMicroseconds(1000);
-	my[1].writeMicroseconds(1000);
-	my[2].writeMicroseconds(1000);
-	my[3].writeMicroseconds(1000);
-	delay(500);
+	// 讓他在低檔位大約 5 秒鐘
+	int d;
+	for(d=0; d<500; d++){
+		sendSignalToMotor();
+		delay(10);
+	}
 }
 void loop()
 {
-	// i3=i2=67;
-	// i1=30;
-	// i4=30;
-	// f=ping()/58;
-	// if(f<30)
-	// 	i=83;
-	// else
-	// 	i=30;
-	// if(a=Serial.read() ){
-	// 	if(a=='1')
-	// 		i2=i2+1;
-	// 	else if(a=='2')
-	// 		i1=i1+1;
-	// 	else if(a=='3')
-	// 		i3=i3+1;
-	// 	else if(a=='4')
-	// 		i4=i4+1;
-	// 	// Serial.print(i2);
-	// 	// Serial.print(i1);
-	// 	// Serial.print(i3);
-	// 	// Serial.println(i4);
-	// }
-	i=42;
-	my[0].write(i);
-	my[1].write(i);
-	my[2].write(i);
-	my[3].write(i);
-	delay(15);
+	f=ping()/58;
+	if(f>50){
+		allvalue=50;
+		changevalue(allvalue,allvalue,allvalue,allvalue);
+	}
+	else{
+		allvalue=30;
+		changevalue(allvalue,allvalue,allvalue,allvalue);
+	}
+	sendSignalToMotor();
+	delay(10);
 }
+//===============================================================================
+//===============================================================================
 unsigned long ping(){
 	digitalWrite(7,HIGH);
-	delayMicroseconds(3);
+	delayMicroseconds(5);
 	digitalWrite(7,LOW);
 	return pulseIn(6,HIGH);
+}
+
+void sendSignalToMotor() {
+	int c;
+	for(c=0; c<4; c++) {
+		my[c].write(myvalue[c]);
+	}
+}
+
+void changevalue(int a1,int a2,int a3,int a4){
+	myvalue[0]=a1;
+	myvalue[1]=a2;
+	myvalue[2]=a3;
+	myvalue[3]=a4;
 }
